@@ -1,5 +1,4 @@
 use self::models::{NewPost, Post};
-use diesel::mysql::MysqlConnection;
 use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
@@ -18,7 +17,8 @@ pub fn establish_connection() -> MysqlConnection {
 pub fn create_post(conn: &mut MysqlConnection, title: &str, body: &str) -> Post {
     use crate::schema::posts;
 
-    let new_post = NewPost { title, body };
+    let new_post: NewPost<'_> = NewPost { title, body };
+
     conn.transaction(|conn| {
         diesel::insert_into(posts::table)
             .values(&new_post)
