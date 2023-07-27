@@ -19,10 +19,9 @@ fn main() {
                 .select(Post::as_select())
                 .find(given_id)
                 .first(connection)?;
-            println!("{}", post.title);
 
             diesel::update(posts)
-                .filter(id.eq(1))
+                .filter(id.eq(given_id))
                 .set(published.eq(true))
                 .execute(connection)?;
             Ok(post)
